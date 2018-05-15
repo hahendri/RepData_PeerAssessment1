@@ -1,0 +1,34 @@
+---
+title: "Reproducible Research: Peer Assessment 1"
+output: 
+  html_document:
+    keep_md: true
+---
+RepData_PeerAssessment1
+========================
+
+This assignment was accomplished by first forking the **rdpeng/RepData_PeerAssessment1 repository**.
+
+The data for the assignment is included in the forked repository - **activity.zip**
+
+Fork the assignment repository above and clone to your desired working directory.
+
+## Loading and preprocessing the data
+
+
+
+
+
+## What is mean total number of steps taken per day?
+
+
+
+## What is the average daily activity pattern?
+
+
+
+## Imputing missing values
+
+
+
+## Are there differences in activity patterns between weekdays and weekends?
