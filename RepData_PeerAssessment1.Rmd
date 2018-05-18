@@ -4,24 +4,60 @@ output:
   html_document:
     keep_md: true
 ---
-RepData_PeerAssessment1
-========================
 
-This assignment was accomplished by first forking the **rdpeng/RepData_PeerAssessment1 repository**.
+This assignment was accomplished by first forking rdpeng's [repository.](https://github.com/rdpeng/RepData_PeerAssessment1)
 
-The data for the assignment is included in the forked repository - **activity.zip**
+The data for the assignment is included in the repository in a file named **activity.zip**
 
 Fork the assignment repository above and clone to your desired working directory.
 
 ## Loading and preprocessing the data
 
+Load the required libraries
 
+```{r}
+library(dplyr)
+library(lubridate)
+library(ggplot2)
+```
 
+Load and Process Data
 
+```{r}
+if (!file.exists("data")) {
+        dir.create("data")
+        }
+unzip("./activity.zip", exdir = "./data")
+data <- read.csv("./data/activity.csv")
+data[,2] <- as_date(data[,2])
+data[,1] <- as.numeric(data[,1])
+```
 
 ## What is mean total number of steps taken per day?
 
+Calculate the total number of steps taken per day
 
+```{r}
+spd <- data %>% 
+        group_by(date) %>%
+        summarize(steps = sum(steps)) %>%
+        as.data.frame(spd)
+spd
+```
+
+Make a histogram of the total number of steps taken each day
+
+```{r, fig.width = 6, fig.height = 6}
+hist(spd$steps, main = "Total Steps Per Day", xlab = "Steps", col = "red", breaks = 10)
+rug(spd$steps)
+```
+
+Calculate and report the mean and median of the total number of steps taken per day
+
+```{r}
+mean(spd$steps, na.rm = TRUE)
+median(spd$steps, na.rm = TRUE)
+```
 
 ## What is the average daily activity pattern?
 
