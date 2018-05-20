@@ -11,7 +11,10 @@ The data for the assignment is included in the repository in a file named **acti
 
 Fork the assignment repository above and clone to your desired working directory.
 
-Built with ```{r}getRversion()```
+Built with r version
+```{r, echo = FALSE}
+getRversion()
+```
 
 ## Loading and preprocessing the data
 

@@ -11,6 +11,12 @@ The data for the assignment is included in the repository in a file named **acti
 
 Fork the assignment repository above and clone to your desired working directory.
 
+Built with r version
+
+```
+## [1] '3.4.4'
+```
+
 ## Loading and preprocessing the data
 
 Load the required libraries
@@ -155,7 +161,7 @@ hist(spd$steps, main = "Total Steps Per Day", xlab = "Steps", col = "red", break
 rug(spd$steps)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
 
 Calculate and report the mean and median of the total number of steps taken per day
 
@@ -191,7 +197,7 @@ plot(x = ints$interval, y = ints$steps, type = "l", xlab = "5-minute Interval of
         "Average Number of Steps per Interval Across All Days")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+![](PA1_template_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
 Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
@@ -248,7 +254,7 @@ hist(spd.nafill$steps, main = "Total Steps Per Day", xlab = "Steps", col = "red"
 rug(spd.nafill$steps)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
+![](PA1_template_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
 
 ```r
 mean(spd.nafill$steps)
@@ -298,4 +304,4 @@ xyplot(steps ~ interval | daytype, data = wewdints, layout = c(1, 2), type = "l"
        xlab = "Interval", ylab = "Number of steps", index.cond = list(c(2, 1)))
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+![](PA1_template_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
