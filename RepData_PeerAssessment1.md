@@ -53,7 +53,7 @@ library(lubridate)
 ```
 
 ```r
-library(ggplot2)
+library(lattice)
 ```
 
 Load and Process Data
@@ -178,10 +178,124 @@ median(spd$steps, na.rm = TRUE)
 
 ## What is the average daily activity pattern?
 
+Make a time series plot (i.e. type="l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
+
+```r
+ints <- data %>%
+        group_by(interval) %>%
+        summarise(steps = mean(steps, na.rm = TRUE)) %>%
+        as.data.frame(ints)
+plot(x = ints$interval, y = ints$steps, type = "l", xlab = "5-minute Interval of Day",
+        ylab = "Average Number of Steps (All Days)", main = 
+        "Average Number of Steps per Interval Across All Days")
+```
+
+![](RepData_PeerAssessment1_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+
+Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
+
+
+```r
+filter(ints, steps == max(ints[,2]))
+```
+
+```
+##   interval    steps
+## 1      835 206.1698
+```
 
 ## Imputing missing values
 
+Calculate and report the total number of missing values in the dataset
 
+
+```r
+sum(is.na(data))
+```
+
+```
+## [1] 2304
+```
+
+Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
+
+*I will use the mean steps over all days for the 5-minute interval, which was calculated above in **ints** dataset to fill in missing data.  The following code creates a duplicate dataset of the original data, creates a vector of intervals with missing step data, and indexes a location for the mean steps over all days for a given interval in the ints dataset from above*
+
+
+```r
+data.nafill <- data
+steps.na <- data.nafill$interval[is.na(data.nafill$steps)]
+index <- sapply(steps.na, function(steps) which(ints$interval == steps))
+```
+
+Create a new dataset that is equal to the original dataset but with the missing data filled in.
+
+
+```r
+data.nafill$steps[is.na(data.nafill$steps)] <- ints$steps[index]
+```
+
+Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day.
+
+
+```r
+spd.nafill <- data.nafill %>% 
+        group_by(date) %>%
+        summarize(steps = sum(steps)) %>%
+        as.data.frame(spd.nafill)
+hist(spd.nafill$steps, main = "Total Steps Per Day", xlab = "Steps", col = "red", breaks = 10)
+rug(spd.nafill$steps)
+```
+
+![](RepData_PeerAssessment1_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
+
+```r
+mean(spd.nafill$steps)
+```
+
+```
+## [1] 10766.19
+```
+
+```r
+median(spd.nafill$steps)
+```
+
+```
+## [1] 10766.19
+```
+
+Do these values differ from the estimates from the first part of the assignment?
+
+**The mean does not differ, but the median does slightly.**
+
+What is the impact of imputing missing data on the estimates of the total daily number of steps?
+
+**The estimate of total daily steps for the missing days makes those days all equal, and increases the frequency of seeing between 10,000 and 10,250 steps durring a day when estimating total stepsper day.  When looking at the histogram with imputed data, you can see that the middle bar is taller than the one in the histogram using the data with missing values.**
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
+
+
+```r
+weekend <- c(6, 7)
+data.wday <- data.nafill 
+data.wday$daytype <- factor((wday(data.wday$date) %in% weekend), levels = c(TRUE, FALSE),
+        labels = c("weekend", "weekday"))
+```
+
+Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
+
+
+```r
+wewdints <- data.wday %>%
+        group_by(daytype, interval) %>%
+        summarise(steps = mean(steps)) %>%
+        as.data.frame(wewdints)
+xyplot(steps ~ interval | daytype, data = wewdints, layout = c(1, 2), type = "l", 
+       xlab = "Interval", ylab = "Number of steps", index.cond = list(c(2, 1)))
+```
+
+![](RepData_PeerAssessment1_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
